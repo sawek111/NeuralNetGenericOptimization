@@ -54,6 +54,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Scripts\Alghorithm\GeneticAlgorithm.cs" />
+    <Compile Include="Scripts\Settings.cs" />
+    <Compile Include="Scripts\Units\Chromosome.cs" />
+    <Compile Include="Scripts\Units\Individual.cs" />
+    <Compile Include="Scripts\Units\Population.cs" />
+    <Compile Include="Scripts\Optimizer.cs" />
+    <Compile Include="Scripts\Enums.cs" />
+    <Compile Include="Scripts\Common.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

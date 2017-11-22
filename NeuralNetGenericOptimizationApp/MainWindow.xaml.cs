@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NeuralNetGenericOptimizationApp.Scripts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,23 @@ namespace NeuralNetGenericOptimizationApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Optimizer _optimizer = null;
+        
         public MainWindow()
         {
             InitializeComponent();
+
+        }
+
+        private void GenerateOptimizator()
+        {
+            _optimizer = new Optimizer();
+            return;
+        }
+
+        private void Evaluate(object sender, RoutedEventArgs e)
+        {
+            _optimizer.Evaluate();
         }
     }
 }
