@@ -13,14 +13,13 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
         private float fitness = 0.0f;
         private Dictionary<ChromosomeType, Chromosome> chromosomes = new Dictionary<ChromosomeType, Chromosome>();
 
-        Random rand = new Random(5);
-
         /// <summary>
         /// Create random individual
         /// </summary>
         public Individual()
         {
             CreateChromosomes();
+            return;
         }
 
         /// <summary>
@@ -29,8 +28,31 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
         public Individual(Individual father, Individual mother)
         {
             CreateChromosomes();
-            CombineParentsChromosomes(father, mother);
 
+            return;
+        }
+
+        public void CombineParentsChromosomes(Individual father, Individual mother)
+        {
+            foreach (ChromosomeType chromosomeType in chromosomes.Keys)
+            {
+                chromosomes[chromosomeType] = Chromosome.CrossOverChromosomes(father.GetChromosome(chromosomeType), mother.GetChromosome(chromosomeType));
+            }
+
+            return;
+        }
+
+        public void CombineParentsChromosomes(Individual[] parents)
+        {
+
+            //TODO DANIEL Zrób tutaj krzyzowanie wielorodzicielskie, tu masz przykład: CombineParentsChromosomes(Individual father, Individual mother)
+            return;
+        }
+
+        public void CombineParentsChromosomes(Individual father, Individual mother, int points)
+        {
+
+            //TODO DANIEL Zrób tutaj krzyzowanie wielopunktowe 
             return;
         }
 
@@ -73,19 +95,6 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
                 ChromosomeType type = (ChromosomeType)chromosomTypeNr;
                 Chromosome newChromosome = new Chromosome(type);
                 chromosomes.Add(type, newChromosome);
-            }
-
-            return;
-        }
-
-        /// <summary>
-        /// Cross all parents chromosomes
-        /// </summary>
-        private void CombineParentsChromosomes(Individual father, Individual mother)
-        {
-            foreach(ChromosomeType chromosomeType in chromosomes.Keys)
-            {
-                chromosomes[chromosomeType] = Chromosome.CrossOverChromosomes(father.GetChromosome(chromosomeType), mother.GetChromosome(chromosomeType));
             }
 
             return;

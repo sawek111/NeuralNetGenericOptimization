@@ -13,4 +13,18 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Utils
         DECAY,
         MAX_ITERATIONS
     }
+
+    public enum SelectionType
+    {
+        Roulette,
+        Tournament,
+        Rank
+    }
+
+    public enum CrossingType
+    {
+        SinglePoint,
+        MultiPoints,
+        MultiParenting
+    }
 }

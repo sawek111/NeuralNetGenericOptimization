@@ -38,10 +38,10 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        public Individual[] GetFittests(int count)
+        public Individual[] GetMostAccurant(int count)
         {
             Individual[] best = new Individual[count];
-            SortWithFitness();
+            SortWithAccuracy();
             for(int i = 0; i < best.Length; i++)
             {
                 best[i] = _population[i];
@@ -76,7 +76,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
             return newPopulation;
         }
 
-        private void SortWithFitness()
+        private void SortWithAccuracy()
         {
             int n = _population.Length;
             do
