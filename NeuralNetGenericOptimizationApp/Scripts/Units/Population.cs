@@ -21,6 +21,11 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
             return;
         }
 
+        public Individual[] GetPopulation()
+        {
+            return _population;
+        }
+
         public int Size
         {
             get { return _population.Length; }

@@ -20,7 +20,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             if(elitism)
             {
                 elitismOffset = ELITISM_SIZE;
-                CopyBestToNewPopultaion();
+                CopyBestToNewPopultaion(population, newPopulation);
             }
             for(int i = elitismOffset; i < population.Size; i++)
             {
@@ -75,8 +75,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             {
                 case SelectionType.Rank:
                 {
-                    //TODO DANIEL : Musi zwracać Individual metodą Rang
-                    return null;
+                        return RankSelection(population);
                 }
                 case SelectionType.Tournament:
                 {
@@ -84,8 +83,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
                 }
                 case SelectionType.Roulette:
                 {
-                    //TODO DANIEL: Musi zwracać Individual metodą Ruletki
-                    return null;
+                   return RouletteSelection(population);
                 }
                 default:
                 {
@@ -113,14 +111,98 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             return fittest;
         }
 
+        /// <summary>
+        /// Selection by roulette wheel
+        /// </summary>
+        /// <param name="population"></param>
+        /// <returns></returns>
+        private static Individual RouletteSelection(Population population)
+        {
+            //fitness of whole population
+            float totalFitness = 0;
+            //calculating sum of fitness
+            for (int i = 0; i < population.Size; i++)
+            {
+                totalFitness += population[i].GetFitness();
+            }
+            //array of probabilities
+            float[] probabilityOfWholePopulation = new float[population.Size];
+
+            //calculating probability of each individual
+            for (int i = 0; i < population.Size; i++)
+            {
+                probabilityOfWholePopulation[i] = population[i].GetFitness() / totalFitness;
+            }
+
+            //draw
+            float random = Common.Instance.Rand.Next(0, 1) * totalFitness;
+
+            for (int i = 0; i < population.Size; i++)
+            {
+                random -= probabilityOfWholePopulation[i];
+                if (random <= 0) return population[i];
+            }
+            //return last individual while error
+            return population[population.Size - 1];
+        }
+
+        /// <summary>
+        /// Selection by linear ranking
+        /// </summary>
+        /// <param name="population"></param>
+        /// <returns></returns>
+        private static Individual RankSelection(Population population)
+        {
+            //sorting by fitness
+            Array.Sort(population.GetPopulation(),
+                delegate (Individual x, Individual y) { return x.GetFitness().CompareTo(y.GetFitness()); });
+
+            //rank sum of whole population
+            float rankSum = 0;
+            //calculating sum of ranks (worst individual on first pos and it has rank equals 1)
+            for (int i = 0; i < population.Size; i++)
+            {
+                rankSum += i;
+            }
+
+            //array of probabilities
+            float[] probabilityOfWholePopulation = new float[population.Size];
+
+            //calculating probability of each individual
+            for (int i = 0; i < population.Size; i++)
+            {
+                probabilityOfWholePopulation[i] = population[i].GetFitness() / rankSum;
+            }
+
+            //draw
+            float random = Common.Instance.Rand.Next(0, 1) * rankSum;
+
+            for (int i = 0; i < population.Size; i++)
+            {
+                random -= probabilityOfWholePopulation[i];
+                if (random <= 0) return population[i];
+            }
+            //return last individual while error
+            return population[population.Size - 1];
+        }
+
         void Costa(ref int kdsak)
         {
             kdsak = 10;
         }
 
-        private static void CopyBestToNewPopultaion()
+        /// <summary>
+        /// Coping few best individuals to new population
+        /// </summary>
+        /// <param name="population"></param>
+        /// <returns></returns>
+        private static void CopyBestToNewPopultaion(Population population, Population newPopulation)
         {
-            //TODO DANIEL : dodaj elityzm
+            Individual[] bestIndividuals = population.GetMostAccurant(ELITISM_SIZE);
+            for(int i =0; i< ELITISM_SIZE; i++)
+            {
+                newPopulation[i] = bestIndividuals[i];
+            }
         }
 
         private static void MutateRandomIndividuals(Population newPopulation)
