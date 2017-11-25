@@ -44,15 +44,19 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
 
         public void CombineParentsChromosomes(Individual[] parents)
         {
-
-            //TODO DANIEL Zrób tutaj krzyzowanie wielorodzicielskie, tu masz przykład: CombineParentsChromosomes(Individual father, Individual mother)
+            foreach (ChromosomeType chromosomeType in chromosomes.Keys)
+            {
+                chromosomes[chromosomeType] = Chromosome.CrossOverChromosomes(parents.Select(x => x.GetChromosome(chromosomeType)).ToArray());
+            }
             return;
         }
 
         public void CombineParentsChromosomes(Individual father, Individual mother, int points)
         {
-
-            //TODO DANIEL Zrób tutaj krzyzowanie wielopunktowe 
+            foreach (ChromosomeType chromosomeType in chromosomes.Keys)
+            {
+                chromosomes[chromosomeType] = Chromosome.CrossOverChromosomes(father.GetChromosome(chromosomeType), mother.GetChromosome(chromosomeType), points);
+            }
             return;
         }
 

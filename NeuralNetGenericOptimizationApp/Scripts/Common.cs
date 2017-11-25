@@ -25,5 +25,17 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Utils
             return;
         }
 
+        public IEnumerable<int> Split(Int32 val, int parts, int minimumValue = 5)
+        {
+            int left = val;
+            for (int i = 0; i < parts - 1; i++)
+            {
+                var curr = _rand.Next(minimumValue, left / parts);
+                yield return curr;
+                left -= curr;
+            }
+            yield return left;
+        }
+
     }
 }

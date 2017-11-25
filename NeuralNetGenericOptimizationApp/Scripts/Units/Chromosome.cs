@@ -63,6 +63,93 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Units
         }
 
         /// <summary>
+        /// Multi parent crossover
+        /// </summary>
+        /// <param name="parentsChromosomes"></param>
+        /// <returns></returns>
+        public static Chromosome CrossOverChromosomes(Chromosome[] parentsChromosomes)
+        {
+            ValidateParents(parentsChromosomes);
+            Chromosome childChromosome = new Chromosome(parentsChromosomes[0]._type);
+            int poolSize = (int)(childChromosome.Length / parentsChromosomes.Length); //each parent give the same amount of chromosomes
+            int noOfParent = 0; //number of parent
+            for (int i = 0; i < childChromosome.Length; i++)
+            {
+                if (i != 0)
+                    if ((i % poolSize == 0) && (noOfParent < parentsChromosomes.Length - 1)) //change of parent
+                    {
+                        noOfParent++;
+                    }
+                childChromosome[i] = parentsChromosomes[noOfParent][i];               
+            }
+
+            return childChromosome;
+        }
+
+
+        /// <summary>
+        /// Multi parent crossover (random amount of parent chromosomes)
+        /// </summary>
+        /// <param name="parentsChromosomes"></param>
+        /// <returns></returns>
+        public static Chromosome CrossOverChromosomesR(Chromosome[] parentsChromosomes)
+        {
+            ValidateParents(parentsChromosomes);
+            Chromosome childChromosome = new Chromosome(parentsChromosomes[0]._type);
+            int[] poolSizes = Common.Instance.Split(childChromosome.Length, parentsChromosomes.Length).ToArray(); //each parent give different amount of chromosomes
+            int noOfParent = 0; //number of parent
+            for (int i = 0; i < childChromosome.Length; i++)
+            {
+                if (i != 0)
+                    if ((i % poolSizes[noOfParent] == 0) && (noOfParent < parentsChromosomes.Length - 1)) //change of parent
+                    {
+                        noOfParent++;
+                    }
+                childChromosome[i] = parentsChromosomes[noOfParent][i];
+            }
+
+            return childChromosome;
+        }
+
+
+        /// <summary>
+        /// Multipoint crossover
+        /// </summary>
+        /// <param name="fatherChromosome"></param>
+        /// <param name="motherChromosome"></param>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public static Chromosome CrossOverChromosomes(Chromosome fatherChromosome, Chromosome motherChromosome, int points)
+        {
+            ValidateParents(fatherChromosome, motherChromosome);
+            Chromosome childChromosome = new Chromosome(fatherChromosome._type);
+            int[] poolSizes = Common.Instance.Split(childChromosome.Length, points).ToArray(); //each parent give different amount of chromosomes
+            int chosenParent = 0;
+            int counter = 0; //needed to change poolsize when eqauls to poolSize[index]
+            int poolSizeNo = 0; //number of poolSize
+            for (int i = 0; i < childChromosome.Length; i++)
+            {
+                if (counter == poolSizes[poolSizeNo])
+                {             
+                    if (chosenParent == 0) //father changed to mother
+                        chosenParent = 1;
+                    else
+                        chosenParent = 0;
+
+                    counter = 0;
+                    poolSizeNo++;
+                }
+                //which parent chosed
+                if (chosenParent == 0)
+                    childChromosome[i] = fatherChromosome[i];
+                else
+                    childChromosome[i] = motherChromosome[i];
+            }
+
+            return childChromosome;
+        }
+
+        /// <summary>
         /// Assign random values to genes
         /// </summary>
         public void Random()
@@ -98,6 +185,26 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Units
                 throw new Exception("You are crossing different chromosomes");
             }
             if (fatherChromosome.Length != motherChromosome.Length)
+            {
+                throw new Exception("Chromosomes have different length, sth went wrong, assure You have assigned chromosome const values (based on type");
+            }
+
+            return;
+        }
+
+        /// <summary>
+        /// Check if all parents are properly chosen
+        /// </summary>
+        private static void ValidateParents(Chromosome[] parents)
+        {         
+            var type = parents.First()._type;
+            if(!parents.All(x => x._type == type))
+            {
+                throw new Exception("You are crossing different chromosomes");
+            }
+
+            var length = parents.First().Length;
+            if (!parents.All(x => x.Length == length))
             {
                 throw new Exception("Chromosomes have different length, sth went wrong, assure You have assigned chromosome const values (based on type");
             }
