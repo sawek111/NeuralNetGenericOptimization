@@ -182,13 +182,9 @@ namespace NeuralNetGenericOptimizationApp.Scripts
                 random -= probabilityOfWholePopulation[i];
                 if (random <= 0) return population[i];
             }
+
             //return last individual while error
             return population[population.Size - 1];
-        }
-
-        void Costa(ref int kdsak)
-        {
-            kdsak = 10;
         }
 
         /// <summary>
@@ -203,6 +199,8 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             {
                 newPopulation[i] = bestIndividuals[i];
             }
+
+            return;
         }
 
         private static void MutateRandomIndividuals(Population newPopulation)
