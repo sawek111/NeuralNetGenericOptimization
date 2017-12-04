@@ -11,7 +11,15 @@ namespace NeuralNetGenericOptimizationApp.Scripts
     {
         public void Evaluate()
         {
-
+            REngine.SetEnvironmentVariables();
+            REngine engine = REngine.GetInstance();
+            string path = @"C:/Users/Saper/Documents/NeuralNetGenericOptimization/NeuralNetGenericOptimizationApp/nnt.R";
+            engine.Evaluate("source('" + path + "')");
+            string[] text = engine.Evaluate("lol('saas')").AsCharacter().ToArray();
+            Console.ReadLine();
+            Console.WriteLine(text[0]);
+            //engine.Initialize()
+            //Console.WriteLine("ALL OK");
         }
 
 

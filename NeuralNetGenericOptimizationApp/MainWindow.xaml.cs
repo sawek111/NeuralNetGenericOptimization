@@ -26,6 +26,7 @@ namespace NeuralNetGenericOptimizationApp
         public MainWindow()
         {
             InitializeComponent();
+            GenerateOptimizator();
 
         }
 
