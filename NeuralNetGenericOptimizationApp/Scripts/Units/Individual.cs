@@ -1,5 +1,6 @@
 ﻿using NeuralNetGenericOptimizationApp.Scripts.Units;
 using NeuralNetGenericOptimizationApp.Scripts.Utils;
+using NeuralNetGenericOptimizationApp.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,10 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
 {
     public class Individual
     {
-        private float fitness = 0.0f;
-        private Dictionary<ChromosomeType, Chromosome> chromosomes = new Dictionary<ChromosomeType, Chromosome>();
+        private float _fitness = 0.0f;
+        private float _time = 0.0f;
+
+        private Dictionary<ChromosomeType, Chromosome> _chromosomes = new Dictionary<ChromosomeType, Chromosome>();
 
         /// <summary>
         /// Create random individual
@@ -96,12 +99,24 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
         public float GetFitness()
         {
             Console.WriteLine("ERROR TODO");
-            if(fitness == 0.0f)
+            if(_fitness == 0.0f)
             {
-            //    fitness =  Math
+                CountAtributes();
             }
 
-            return 0.0f;
+            return _fitness;
+        }
+
+        /// <summary>
+        /// Time and Fitness
+        /// </summary>
+        private void CountAtributes()
+        {
+            double[] result = RManager.rManager.Count();
+            _fitness = (float)result[0];
+            _time = (float)result[1];
+
+            return;
         }
 
         /// <summary>
