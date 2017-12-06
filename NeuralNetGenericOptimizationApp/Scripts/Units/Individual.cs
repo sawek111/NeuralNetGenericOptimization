@@ -34,9 +34,14 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
 
         public void CombineParentsChromosomes(Individual father, Individual mother)
         {
-            foreach (ChromosomeType chromosomeType in chromosomes.Keys)
+            for (int i = 0; i < Enum.GetNames(typeof(ChromosomeType)).Length; i++)
             {
-                chromosomes[chromosomeType] = Chromosome.CrossOverChromosomes(father.GetChromosome(chromosomeType), mother.GetChromosome(chromosomeType));
+                if (_chromosomes.ContainsKey((ChromosomeType)i))
+                {
+                    _chromosomes[(ChromosomeType)i] = Chromosome.CrossOverChromosomes(father.GetChromosome((ChromosomeType)i), mother.GetChromosome((ChromosomeType)i));
+                    continue;
+                }
+                throw new Exception("Some chromosomes are not prepared properly");
             }
 
             return;
@@ -44,25 +49,36 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
 
         public void CombineParentsChromosomes(Individual[] parents)
         {
-            foreach (ChromosomeType chromosomeType in chromosomes.Keys)
+            for (int i = 0; i < Enum.GetNames(typeof(ChromosomeType)).Length; i++)
             {
-                chromosomes[chromosomeType] = Chromosome.CrossOverChromosomes(parents.Select(x => x.GetChromosome(chromosomeType)).ToArray());
+                if (_chromosomes.ContainsKey((ChromosomeType)i))
+                {
+                    _chromosomes[(ChromosomeType)i] = Chromosome.CrossOverChromosomes(parents.Select(x => x.GetChromosome((ChromosomeType)i)).ToArray());
+                    continue;
+                }
+                throw new Exception("Some chromosomes are not prepared properly");
             }
+
             return;
         }
 
         public void CombineParentsChromosomes(Individual father, Individual mother, int points)
         {
-            foreach (ChromosomeType chromosomeType in chromosomes.Keys)
+            for (int i = 0; i < Enum.GetNames(typeof(ChromosomeType)).Length; i++)
             {
-                chromosomes[chromosomeType] = Chromosome.CrossOverChromosomes(father.GetChromosome(chromosomeType), mother.GetChromosome(chromosomeType), points);
+                if (_chromosomes.ContainsKey((ChromosomeType)i))
+                {
+                    _chromosomes[(ChromosomeType)i] = Chromosome.CrossOverChromosomes(father.GetChromosome((ChromosomeType)i), mother.GetChromosome((ChromosomeType)i), points);
+                    continue;
+                }
+                throw new Exception("Some chromosomes are not prepared properly");
             }
             return;
         }
 
         public Chromosome GetChromosome(ChromosomeType type)
         {
-            return chromosomes[type];
+            return _chromosomes[type];
         }
 
         /// <summary>
@@ -72,7 +88,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
         {
             ChromosomeType chosenChromosomeType = (ChromosomeType)Common.Instance.Rand.Next(0, Enum.GetNames(typeof(ChromosomeType)).Length - 1);
             Console.WriteLine("Muate " + chosenChromosomeType.ToString());
-            chromosomes[chosenChromosomeType].Mutate(1);
+            _chromosomes[chosenChromosomeType].Mutate(1);
 
             return;
         }
@@ -93,12 +109,12 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
         /// </summary>
         private void CreateChromosomes()
         {
-            int chromosomeTypesCount = Enum.GetNames(typeof(ChromosomeType)).Length -1;
+            int chromosomeTypesCount = Enum.GetNames(typeof(ChromosomeType)).Length;
             for(int chromosomTypeNr = 0; chromosomTypeNr < chromosomeTypesCount; chromosomTypeNr++)
             {
                 ChromosomeType type = (ChromosomeType)chromosomTypeNr;
                 Chromosome newChromosome = new Chromosome(type);
-                chromosomes.Add(type, newChromosome);
+                _chromosomes.Add(type, newChromosome);
             }
 
             return;
