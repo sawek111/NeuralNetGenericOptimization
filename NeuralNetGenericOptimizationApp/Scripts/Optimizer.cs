@@ -11,22 +11,14 @@ namespace NeuralNetGenericOptimizationApp.Scripts
 {
     public class Optimizer
     {
-        public const int GENERATIONS = 100;
-        public const int GENERATION_SIZE = 100;
-
-
-        public void Evaluate()
+      
+        public void Evaluate(int Generations, int GenerationSize)
         {
-            REngine.SetEnvironmentVariables();
-            REngine engine = REngine.GetInstance();
-            string path = @"C:/Users/Saper/Documents/NeuralNetGenericOptimization/NeuralNetGenericOptimizationApp/nnt.R";
-            engine.Evaluate("source('" + path + "')");
-            string[] text = engine.Evaluate("lol('saas')").AsCharacter().ToArray();
+            double[] text = RManager.rManager.Count();
             Console.ReadLine();
-            Console.WriteLine(text[0]);
             //engine.Initialize()
             //Console.WriteLine("ALL OK");
-            Evolve(GENERATIONS, GENERATION_SIZE, SelectionType.Rank, CrossingType.SinglePoint, true);
+            Evolve(Generations, GenerationSize, SelectionType.Rank, CrossingType.SinglePoint, true);
         }
 
         public void Evolve(int generations, int generationSize, SelectionType selection, CrossingType crossing, bool elitism)
@@ -44,7 +36,6 @@ namespace NeuralNetGenericOptimizationApp.Scripts
 
             return;
         }
-
 
     }
 }
