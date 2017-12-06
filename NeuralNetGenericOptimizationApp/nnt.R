@@ -1,29 +1,76 @@
-
- classifyWithNNt <- function(pathToDirectory, fileName, hiddenNeuronsValue, iterationValue, decayValue, maxNWtsValue)
+pkgTest <- function(x)
 {
-   library(plyr)
-   library(rpart)
-   library(FSelector)
-   library(corrplot)
-   library(MASS)
-   library(class)
-   library(caret)
-   library(nnet)
-   library(ggplot2)
-   
+  if (!require(x,character.only = TRUE))
+  {
+    install.packages(x,dep=TRUE)
+    if(!require(x,character.only = TRUE)) stop("Package not found")
+  }
+}
+
+createProgressBar <- function(iterationNumber)
+{
+  progress.bar <- create_progress_bar("text")
+  progress.bar$init(iterationNumber)
+  return(progress.bar)
+}
+
+countAccuraciesNnt <- function(class, trainingset, testset, hiddenNeuronsValue, iterationValue, decayValue)
+{
+  neuralNetwork <- nnet(class, data = trainingset, size = hiddenNeuronsValue, maxit = iterationValue, decay = decayValue, MaxNWts = 100000)
+  pred.neuralNetwork <- predict(neuralNetwork,testset,type = "class")
+  fold_accuracy <- mean(pred.neuralNetwork == testset$Class)
+  return(fold_accuracy)
+}
+
+addColumnWithNumberOfObservation <- function(dataName, k)
+{
+  id <- sample(1:k, nrow(dataName), replace = TRUE)
+  return(id)
+} 
+
+preprocessing <- function(dataName, classColumnNumber) {
+  dataName <-as.data.frame(dataName)
+  dataName <-na.omit(dataName)
+  colnames(dataName)[classColumnNumber] <- "Class"
+  dataName$Class <- as.factor(dataName$Class)
+  
+  x<- as.matrix(dataName[,names(dataName) != "Class"])
+  mode(x) = "numeric"
+  dataName[,names(dataName) != "Class"] <- x
+  
+  return((dataName))
+}
+
+loadPackages <- function()
+{
   pkgTest("rpart")
   pkgTest("plyr")
   pkgTest("FSelector")
   pkgTest("corrplot")
-  pkgTest("Mass")
+  pkgTest("MASS")
   pkgTest("class")
   pkgTest("caret")
   pkgTest("nnet")
   pkgTest("ggplot2")
   
-  setwd(pathToDirectory)
-  someData <- read.csv2(fileName)
+  library(plyr)
+  library(rpart)
+  library(FSelector)
+  library(corrplot)
+  library(MASS)
+  library(class)
+  library(caret)
+  library(nnet)
+  library(ggplot2)
   
+  return()
+}
+
+classifyWithNNt <- function(pathToDirectory, classColumnNumber, hiddenNeuronsValue, iterationValue, decayValue)
+{
+  loadPackages()
+  
+  someData <- read.csv2(pathToDirectory)
   
   k = 10
   
@@ -32,51 +79,9 @@
   timeNNt <- vector('numeric')
   timeNNtFilter <- vector('numeric')
   
-  preprocessing <- function(dataName, classColumn) {
-    dataName <-as.data.frame(dataName)
-    dataName <-na.omit(dataName)
-    dataName[, names(dataName)== classColumn] <- as.factor(dataName[,names(dataName) == classColumn])
-    
-    x<- as.matrix(dataName[,names(dataName) != classColumn])
-    mode(x) = "numeric"
-    dataName[,names(dataName) != classColumn] <- x
-    
-    return((dataName))
-  }
-  
-  pkgTest <- function(x)
-  {
-    if (!require(x,character.only = TRUE))
-    {
-      install.packages(x,dep=TRUE)
-      if(!require(x,character.only = TRUE)) stop("Package not found")
-    }
-  }
-  
-  createProgressBar <- function(iterationNumber)
-  {
-    progress.bar <- create_progress_bar("text")
-    progress.bar$init(iterationNumber)
-    return(progress.bar)
-  }
-  
-  countAccuraciesNnt <- function(class, trainingset, testset, hiddenNeuronsValue, iterationValue, decayValue, maxNWtsValue)
-  {
-    neuralNetwork <- nnet(class, data = trainingset, size = hiddenNeuronsValue, maxit = iterationValue, decay = decayValue, MaxNWts = maxNWtsValue)
-    pred.neuralNetwork <- predict(neuralNetwork,testset,type = "class")
-    fold_accuracy <- mean(pred.neuralNetwork == testset$Class)
-    return(fold_accuracy)
-  }
-  
-  addColumnWithNumberOfObservation <- function(dataName, k)
-  {
-    id <- sample(1:k, nrow(dataName), replace = TRUE)
-    return(id)
-  }
-  
   someData$Class <- as.numeric(someData$Class)
   
-  someData <- preprocessing(someData, "Class")
+  someData <- preprocessing(someData, classColumnNumber)
   
   someData$id <- addColumnWithNumberOfObservation(someData, k)
   
@@ -93,7 +98,7 @@
       testset$id <- NULL
       
       start <- Sys.time()
-      accuracyNnt <- countAccuraciesNnt(Class~., trainingset, testset, hiddenNeuronsValue, iterationValue, decayValue, maxNWtsValue)
+      accuracyNnt <- countAccuraciesNnt(Class~., trainingset, testset, hiddenNeuronsValue, iterationValue, decayValue)
       stop <- Sys.time()
       timeNNt <- append(timeNNt, stop-start)
   
@@ -115,10 +120,9 @@
   results <- c(finalAccuracies, times)
   
   return(results)
- }
+}
+
+#########CALLING
+##a <- classifyWithNNt(path,58, 10,100,0.5)
  
- lol <- function(text)
- {
-   return (text)
- }
  
