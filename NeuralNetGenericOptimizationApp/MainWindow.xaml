@@ -7,7 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Button Content="Count" HorizontalAlignment="Left" Margin="214,112,0,0" VerticalAlignment="Top" Width="75" Click="Evaluate"/>
+        <Button Content="Memetic" HorizontalAlignment="Left" Margin="75,273,0,0" VerticalAlignment="Top" Width="75" Click="Evaluate"/>
+        <Button Content="Random" HorizontalAlignment="Left" Margin="199,273,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.373,0.698" Click="RandomSearch"/>
+        <TextBox x:Name="DatasetText" HorizontalAlignment="Left" Height="23" Margin="30,20,0,0" TextWrapping="Wrap" Text="Dataset" VerticalAlignment="Top" Width="443"/>
+        <Button Content="Load data" HorizontalAlignment="Left" Margin="54,43,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.267,0.115" Click="ChooseDatasetFile"/>
+        <TextBox x:Name="ColumnNumber" HorizontalAlignment="Left" Height="23" Margin="154,43,0,0" TextWrapping="Wrap" Text="ColumnNumber" VerticalAlignment="Top" Width="120" TextChanged="ChooseColumnNumber_TextChanged"/>
 
     </Grid>
 </Window>
