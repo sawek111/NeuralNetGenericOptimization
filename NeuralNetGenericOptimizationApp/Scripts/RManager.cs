@@ -38,6 +38,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             {
                 DatasetPath = Common.ConvertPathToR(DatasetPath);
             }
+            string functionCallString = GenerateFunctionCall();
             double[] result = _engine.Evaluate(GenerateFunctionCall()).AsNumeric().ToArray();
 
             return result;
@@ -58,6 +59,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             string functionCallString = "classifyWithNNt(" + "'" + DatasetPath + "'" + "," 
                 + ColumnNumber.ToString() + ","
                 + "10,100,0.8)";
+
             return functionCallString;
         }
     }
