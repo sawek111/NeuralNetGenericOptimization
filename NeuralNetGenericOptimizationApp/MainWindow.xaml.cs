@@ -17,6 +17,7 @@ namespace NeuralNetGenericOptimizationApp
     {
         public const int GENERATIONS = 5;
         public const int GENERATION_SIZE = 5;
+        public const int NEIGHBORHOOD_SIZE= 5;
 
         private Optimizer _optimizer = null;
 
@@ -36,7 +37,7 @@ namespace NeuralNetGenericOptimizationApp
         {
             if (IsReady())
             {
-                _optimizer.MemeticSearch(GENERATIONS, GENERATION_SIZE);
+                _optimizer.MemeticSearch(GENERATIONS, GENERATION_SIZE, NEIGHBORHOOD_SIZE);
             }
         }
 
