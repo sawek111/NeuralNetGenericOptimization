@@ -1,20 +1,12 @@
 ﻿using NeuralNetGenericOptimizationApp.Scripts;
+using NeuralNetGenericOptimizationApp.Scripts.Alghorithm;
+using NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm;
 using NeuralNetGenericOptimizationApp.Scripts.Utils;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace NeuralNetGenericOptimizationApp
 {
@@ -32,7 +24,7 @@ namespace NeuralNetGenericOptimizationApp
         private string _datasetPath;
 
         private bool _classColumnNumberFilled = false;
-        
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,26 +32,20 @@ namespace NeuralNetGenericOptimizationApp
 
         }
 
-        private void GenerateOptimizator()
+        private void DoMemetic(object sender, RoutedEventArgs e)
         {
-            _optimizer = new Optimizer();
-            return;
+            if (IsReady())
+            {
+                _optimizer.MemeticSearch(GENERATIONS, GENERATION_SIZE);
+            }
         }
 
-        private void Evaluate(object sender, RoutedEventArgs e)
+        private void DoRandom(object sender, RoutedEventArgs e)
         {
-            if(IsReady())
+            if (IsReady())
             {
-                _optimizer.Evaluate(GENERATIONS, GENERATION_SIZE);
+                _optimizer.RandomSearch();
             }
-        } 
-
-        private void RandomSearch(object sender, RoutedEventArgs e)
-        {
-            RandomSearchAlghorithm randomSearchAlghorithm = new RandomSearchAlghorithm(4);
-            randomSearchAlghorithm.Evaluate();
-
-            return;
         }
 
         private void ChooseDatasetFile(object sender, RoutedEventArgs e)
@@ -99,9 +85,9 @@ namespace NeuralNetGenericOptimizationApp
         {
             TextBox textBox = sender as TextBox;
             int result;
-            if(int.TryParse(textBox.Text, out result))
+            if (int.TryParse(textBox.Text, out result))
             {
-                if(result > 0)
+                if (result > 0)
                 {
                     _classColumnNumberFilled = true;
                     textBox.Background = Brushes.LightGreen;
@@ -118,5 +104,12 @@ namespace NeuralNetGenericOptimizationApp
         {
             return _dataChosen && _classColumnNumberFilled;
         }
+
+        private void GenerateOptimizator()
+        {
+            _optimizer = new Optimizer();
+            return;
+        }
+
     }
 }
