@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NeuralNetGenericOptimizationApp.Scripts;
+using NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm;
 
 namespace NeuralNetGenericOptimizationApp
 {
@@ -29,26 +30,20 @@ namespace NeuralNetGenericOptimizationApp
             return;
         }
 
-        public void Evaluate()
+        public Individual Evaluate()
         {
-
+            Individual best = new Individual();
             for (int i = 0; i < _iterationsLimit; i++)
             {
-                double[] results = RManager.rManager.Count();
-                if (results[0] >= _satisfactoryAccurancy)
+                Individual newIndividual = new Individual();
+                best = Individual.GetBetterIndividual(best, newIndividual);
+                if (best.GetFitness() >= _satisfactoryAccurancy)
                 {
                     break;
-                    //TODO save to file : best params + time  
                 }
             }
-            SaveToFile();
 
-            return;
-        }
-
-        private void SaveToFile()
-        {
-
+            return best;
         }
     }
 }
