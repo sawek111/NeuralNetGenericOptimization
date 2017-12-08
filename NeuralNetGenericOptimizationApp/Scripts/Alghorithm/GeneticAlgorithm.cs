@@ -1,4 +1,5 @@
-﻿using NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm;
+﻿using NeuralNetGenericOptimizationApp.Scripts.Alghorithm;
+using NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm;
 using NeuralNetGenericOptimizationApp.Scripts.Utils;
 using System;
 
@@ -12,8 +13,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
         private const int ELITISM_SIZE = 2;
         private const int MULTI_POINTS_CROSSING = 4;
 
-
-        public static Population Evolve(Population population, SelectionType selectionType, CrossingType crossingType, bool elitism)
+        public Population Evolve(Population population, SelectionType selectionType, CrossingType crossingType, bool elitism)
         {
             Population newPopulation = new Population(population.Size, false);
             int elitismOffset = 0;
@@ -33,7 +33,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             return newPopulation;
         }
 
-        private static Individual CombineParents(Individual[] parents, CrossingType crossingType)
+        private Individual CombineParents(Individual[] parents, CrossingType crossingType)
         {
             Individual child = new Individual();
             switch(crossingType)
@@ -58,7 +58,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             return child;
         }
 
-        private static Individual[] ChooseParents(SelectionType selectionType, Population population)
+        private Individual[] ChooseParents(SelectionType selectionType, Population population)
         {
             Individual[] newChosenParents = new Individual[MAX_PARENTS]; 
             for (int i = 0; i < MAX_PARENTS; i++)
@@ -69,7 +69,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             return newChosenParents;
         }
 
-        private static Individual DoSelection(SelectionType selectionType, Population population)
+        private Individual DoSelection(SelectionType selectionType, Population population)
         {
             switch(selectionType)
             {
@@ -94,8 +94,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             return null;
         }
 
-
-        private static Individual TournamentSelection(Population population)
+        private Individual TournamentSelection(Population population)
         {
             // Create a tournament population
             Population tournamentPopulation = new Population(TOURNAMENT_SIZE, false);
@@ -116,7 +115,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
         /// </summary>
         /// <param name="population"></param>
         /// <returns></returns>
-        private static Individual RouletteSelection(Population population)
+        private Individual RouletteSelection(Population population)
         {
             //fitness of whole population
             float totalFitness = 0;
@@ -151,7 +150,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
         /// </summary>
         /// <param name="population"></param>
         /// <returns></returns>
-        private static Individual RankSelection(Population population)
+        private Individual RankSelection(Population population)
         {
             //sorting by fitness
             Array.Sort(population.GetPopulation(),
@@ -192,7 +191,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
         /// </summary>
         /// <param name="population"></param>
         /// <returns></returns>
-        private static void CopyBestToNewPopultaion(Population population, Population newPopulation)
+        private void CopyBestToNewPopultaion(Population population, Population newPopulation)
         {
             Individual[] bestIndividuals = population.GetMostAccurant(ELITISM_SIZE);
             for(int i =0; i< ELITISM_SIZE; i++)
@@ -203,7 +202,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             return;
         }
 
-        private static void MutateRandomIndividuals(Population newPopulation)
+        private void MutateRandomIndividuals(Population newPopulation)
         {
             for (int i = 0; i < newPopulation.Size; i++)
             {
