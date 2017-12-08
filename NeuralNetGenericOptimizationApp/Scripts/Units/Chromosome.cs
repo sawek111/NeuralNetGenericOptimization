@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetGenericOptimizationApp.Scripts.Units
 {
-    public class Chromosome
+    public struct Chromosome
     {
         private byte[] _genes;
         private ChromosomeType _type;
@@ -30,6 +30,27 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Units
         public int Length
         {
             get { return _genes.Length; }
+        }
+
+        public void SetGenes(int decValue)
+        {
+            string binary = Convert.ToString(decValue, 2);
+            int length = (binary.Length < _genes.Length) ? binary.Length : _genes.Length;
+            for (int i = 0; i < length; i++)
+            {
+                _genes[i] = (byte)binary[i];
+            }
+
+            return;
+        }
+
+        public int GetGeneDecimalValue()
+        {
+            string valueString = string.Join("", _genes);
+            int value = Convert.ToInt32(valueString, 2);
+            Console.WriteLine(_genes + " value: " + value);
+
+            return value;
         }
 
         /// <summary>
