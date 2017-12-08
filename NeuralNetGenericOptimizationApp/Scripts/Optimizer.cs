@@ -1,4 +1,5 @@
-﻿using NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm;
+﻿using NeuralNetGenericOptimizationApp.Scripts.Alghorithm;
+using NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm;
 using NeuralNetGenericOptimizationApp.Scripts.Utils;
 using RDotNet;
 using System;
@@ -11,28 +12,31 @@ namespace NeuralNetGenericOptimizationApp.Scripts
 {
     public class Optimizer
     {
-      
-        public void Evaluate(int Generations, int GenerationSize)
+        public void RandomSearch()
         {
-            double[] text = RManager.rManager.Count();
-            Console.ReadLine();
-            //engine.Initialize()
-            //Console.WriteLine("ALL OK");
-            Evolve(Generations, GenerationSize, SelectionType.Rank, CrossingType.SinglePoint, true);
+            RandomSearchAlghorithm randomSearchAlghorithm = new RandomSearchAlghorithm(4);
+            randomSearchAlghorithm.Evaluate();
+
+            return;
         }
 
-        public void Evolve(int generations, int generationSize, SelectionType selection, CrossingType crossing, bool elitism)
+        public void MemeticSearch(int Generations, int GenerationSize, int neighbourhoodSize)
         {
-            Population population = new Population(generationSize);
+            GeneticAlgorithm genetic = new GeneticAlgorithm();
+            LocalSearchAlghorithm localSearch = new LocalSearchAlghorithm();
+
+            Population population = new Population(GenerationSize);
+            Individual best = new Individual();
             int generationNr = 0;
 
-            while(generationNr < generations )
+            while (generationNr < Generations)
             {
                 generationNr++;
-                population = GeneticAlgorithm.Evolve(population, selection, crossing, elitism);
-                Console.WriteLine("Generation: " + generationNr + " Fittest: " + population.GetMostAccurant(1)[0]);
-                
+                population = genetic.Evolve(population, SelectionType.Rank, CrossingType.SinglePoint, elitism: true);
+                Individual localBest =  localSearch.CheckNeighbourhood(population.GetRepresentation(5), 5);
+                best = Individual.GetBetterIndividual(localBest, best);
             }
+            best = Individual.GetBetterIndividual(population.GetMostAccurant(1)[0], best);
 
             return;
         }
