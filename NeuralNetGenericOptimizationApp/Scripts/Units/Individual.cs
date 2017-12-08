@@ -25,14 +25,18 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
             return;
         }
 
-        /// <summary>
-        /// Create from parents with chromosomes crossing
-        /// </summary>
-        public Individual(Individual father, Individual mother)
+        public Individual(Individual copy, ChromosomeType type, int newValue) : base()
         {
-            CreateChromosomes();
+            for(int i = 0; i < Enum.GetNames(typeof(ChromosomeType)).Length; i++)
+            {
+                _chromosomes[(ChromosomeType)i] = copy._chromosomes[(ChromosomeType)i];
+            }
+            _chromosomes[type].SetGenes(newValue);
+        }
 
-            return;
+        public static Individual GetBetterIndividual(Individual individual1, Individual individual2)
+        {
+            return (individual1.GetFitness() > individual2.GetFitness()) ? individual1 : individual2;
         }
 
         public void CombineParentsChromosomes(Individual father, Individual mother)
@@ -98,7 +102,6 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
 
         public float GetFitness()
         {
-            Console.WriteLine("ERROR TODO");
             if(_fitness == 0.0f)
             {
                 CountAtributes();
