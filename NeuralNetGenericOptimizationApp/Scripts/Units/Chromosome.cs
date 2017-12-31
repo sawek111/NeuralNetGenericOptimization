@@ -36,10 +36,11 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Units
         {
             string binary = Convert.ToString(decValue, 2);
             int length = (binary.Length < _genes.Length) ? binary.Length : _genes.Length;
-            for (int i = 0; i < length; i++)
+            for (int i = 1; i <= length; i++)
             {
-                _genes[i] = (byte)binary[i];
+                _genes[_genes.Length - i] = byte.Parse(binary[binary.Length - i].ToString()) ;
             }
+            PreventZeroValueGene();
 
             return;
         }
@@ -51,6 +52,20 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Units
             Console.WriteLine(_genes + " value: " + value);
 
             return value;
+        }
+
+        /// <summary>
+        /// Get gene value in range 0,1
+        /// </summary>
+        /// <returns></returns>
+        public float GetGeneFlotValue()
+        {
+            string valueString = string.Join("", _genes);
+            int value = Convert.ToInt32(valueString, 2);
+            float dividedValue = (float)value / (float)Math.Pow(2, _genes.Length);
+            Console.WriteLine(_genes + " value: " + value);
+
+            return dividedValue;
         }
 
         /// <summary>
@@ -177,10 +192,10 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Units
         {
             for(int i = 0; i < _genes.Length; i++)
             {
-                int value = Common.Instance.Rand.Next(0, 1);
+                int value = Common.Instance.Rand.Next(0, 2);
                 _genes[i] = (byte)value;
-                Console.WriteLine(value + " " + _genes[i]);
             }
+            PreventZeroValueGene();
 
             return;
         }
@@ -192,6 +207,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Units
                 int geneNumber = Common.Instance.Rand.Next(0, _genes.Length-1);
                 MutateGene(ref _genes[geneNumber]);
             }
+            PreventZeroValueGene();
 
             return;
         }
@@ -241,6 +257,23 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Units
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Set 1 value for zero value genes
+        /// </summary>
+        private void PreventZeroValueGene()
+        {
+            for(int i = 0; i < _genes.Length; i++)
+            {
+                if(_genes[i] != 0)
+                {
+                    return;
+                }
+            }
+            _genes[_genes.Length - 1] = 1;
+
+            return;
         }
 
         private void MutateGene(ref byte gene)
