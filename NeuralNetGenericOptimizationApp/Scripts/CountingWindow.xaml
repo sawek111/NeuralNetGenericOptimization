@@ -1,0 +1,17 @@
+﻿<Window x:Class="NeuralNetGenericOptimizationApp.Scripts.CountingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NeuralNetGenericOptimizationApp.Scripts"
+        mc:Ignorable="d"
+        Title="CountingWindow" Height="350" Width="525">
+    <Grid>
+        <Button Content="Memetic" Margin="75,273,0,0" VerticalAlignment="Top" Width="75" Click="DoMemetic"/>
+        <Button Content="Random" HorizontalAlignment="Left" Margin="28.054,273,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.373,0.698" Click="DoRandom" Grid.Column="1"/>
+        <TextBox x:Name="DatasetText" HorizontalAlignment="Left" Height="23" Margin="30,20,0,0" TextWrapping="Wrap" Text="Dataset" VerticalAlignment="Top" Width="443" Grid.ColumnSpan="2"/>
+        <Button Content="Load data" HorizontalAlignment="Left" Margin="54,43,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.267,0.115" Click="ChooseDatasetFile"/>
+        <TextBox x:Name="ColumnNumber" HorizontalAlignment="Left" Height="23" Margin="154,43,0,0" TextWrapping="Wrap" Text="ColumnNumber" VerticalAlignment="Top" Width="120" TextChanged="ChooseColumnNumber_TextChanged" Grid.ColumnSpan="2"/>
+        <Button Content="Count&#xD;&#xA;" HorizontalAlignment="Left" Margin="389,269,0,0" VerticalAlignment="Top" Click="DoMemetic" Width="84" Height="23"/>
+    </Grid>
+</Window>
