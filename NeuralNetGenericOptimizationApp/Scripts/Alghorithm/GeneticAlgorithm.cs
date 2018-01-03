@@ -7,13 +7,12 @@ namespace NeuralNetGenericOptimizationApp.Scripts
 {
     public class GeneticAlgorithm
     {
-        private const float MUTATTION_RATE = 0.015f;
         private const int TOURNAMENT_SIZE = 5;
         private const int MAX_PARENTS = 4;
         private const int ELITISM_SIZE = 2;
         private const int MULTI_POINTS_CROSSING = 4;
 
-        public Population Evolve(Population population, SelectionType selectionType, CrossingType crossingType, bool elitism)
+        public Population Evolve(Population population, SelectionType selectionType, CrossingType crossingType, float mutationRate,  bool elitism)
         {
             Population newPopulation = new Population(population.Size, false);
             int elitismOffset = 0;
@@ -28,7 +27,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
                 Individual child = CombineParents(chosenParents, crossingType);
                 newPopulation[i] = child;
             }
-            MutateRandomIndividuals(newPopulation);
+            MutateRandomIndividuals(newPopulation, mutationRate);
 
             return newPopulation;
         }
@@ -202,11 +201,11 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             return;
         }
 
-        private void MutateRandomIndividuals(Population newPopulation)
+        private void MutateRandomIndividuals(Population newPopulation, float mutationRate)
         {
             for (int i = 0; i < newPopulation.Size; i++)
             {
-                if(MUTATTION_RATE >= Common.Instance.Rand.NextDouble())
+                if(mutationRate >= Common.Instance.Rand.NextDouble())
                 {
                     newPopulation[i].Mutate();
                 }
