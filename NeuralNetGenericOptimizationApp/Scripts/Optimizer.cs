@@ -15,7 +15,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
         public void RandomSearch()
         {
             RandomSearchAlghorithm randomSearchAlghorithm = new RandomSearchAlghorithm(4);
-            randomSearchAlghorithm.Evaluate();
+            Individual best  = randomSearchAlghorithm.Evaluate();
 
             return;
         }
