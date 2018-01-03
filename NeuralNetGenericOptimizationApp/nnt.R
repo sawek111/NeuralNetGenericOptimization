@@ -16,7 +16,7 @@ createProgressBar <- function(iterationNumber)
 
 countAccuraciesNnt <- function(class, trainingset, testset, hiddenNeuronsValue, iterationValue, decayValue)
 {
-  neuralNetwork <- nnet(class, data = trainingset, size = hiddenNeuronsValue, maxit = iterationValue, decay = decayValue, MaxNWts = 100000)
+  neuralNetwork <- nnet(class, data = trainingset, size = hiddenNeuronsValue, maxit = iterationValue, decay = decayValue, MaxNWts = 1000000)
   pred.neuralNetwork <- predict(neuralNetwork,testset,type = "class")
   fold_accuracy <- mean(pred.neuralNetwork == testset$Class)
   return(fold_accuracy)
@@ -65,6 +65,12 @@ loadPackages <- function()
   
   return()
 }
+
+test <- function()
+{
+  results <- c(1.0)
+  return (results)
+  }
 
 classifyWithNNt <- function(pathToDirectory, classColumnNumber, hiddenNeuronsValue, iterationValue, decayValue)
 {
@@ -121,6 +127,8 @@ classifyWithNNt <- function(pathToDirectory, classColumnNumber, hiddenNeuronsVal
   
   return(results)
 }
+
+
 
 #########CALLING
 ##a <- classifyWithNNt(path,58, 10,100,0.5)
