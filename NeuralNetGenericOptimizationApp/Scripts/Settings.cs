@@ -9,9 +9,8 @@ namespace NeuralNetGenericOptimizationApp.Scripts
 {
     public static class Settings
     {
-        private const int HIDDEN_LAYER_SIZE_CHROMOSOME_BITS = 16;
-        private const int HIDDEN_LAYERS_COUNT_CHROMOSOME_BITS = 6;
-        private const int MAX_ITERATIONS_CHROMOSOME_BITS = 8;
+        private const int HIDDEN_LAYER_SIZE_CHROMOSOME_BITS = 6;
+        private const int MAX_ITERATIONS_CHROMOSOME_BITS = 10;
         private const int DECAY_CHROMOSOME_BITS = 8;
 
         /// <summary>
@@ -28,10 +27,6 @@ namespace NeuralNetGenericOptimizationApp.Scripts
                 case ChromosomeType.HIDDEN_LAYER_SIZE:
                 {
                     return HIDDEN_LAYER_SIZE_CHROMOSOME_BITS;
-                }
-                case ChromosomeType.HIDDEN_LAYERS_COUNT:
-                {
-                    return HIDDEN_LAYERS_COUNT_CHROMOSOME_BITS;
                 }
                 case ChromosomeType.MAX_ITERATIONS:
                 {

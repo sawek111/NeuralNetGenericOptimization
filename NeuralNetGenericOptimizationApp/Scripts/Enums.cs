@@ -9,7 +9,6 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Utils
     public enum ChromosomeType
     {
         HIDDEN_LAYER_SIZE,
-        HIDDEN_LAYERS_COUNT,
         DECAY,
         MAX_ITERATIONS
     }
