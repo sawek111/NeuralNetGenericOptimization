@@ -66,6 +66,11 @@
     </ApplicationDefinition>
     <Compile Include="Scripts\Alghorithm\GeneticAlgorithm.cs" />
     <Compile Include="Scripts\Alghorithm\LocalSearchAlghorithm.cs" />
+    <Compile Include="Scripts\Alghorithm\RandomSearchAlghorithm.cs" />
+    <Compile Include="Scripts\CountingWindow.xaml.cs">
+      <DependentUpon>CountingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Scripts\RManager.cs" />
     <Compile Include="Scripts\Settings.cs" />
     <Compile Include="Scripts\Units\Chromosome.cs" />
     <Compile Include="Scripts\Units\Individual.cs" />
@@ -85,6 +90,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Scripts\CountingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
