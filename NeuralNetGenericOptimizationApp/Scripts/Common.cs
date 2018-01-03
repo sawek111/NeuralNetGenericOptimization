@@ -42,6 +42,5 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Utils
             string rPath = CSharpPath.Replace('\\', '/');
             return rPath;
         }
-
     }
 }
