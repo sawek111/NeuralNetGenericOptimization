@@ -1,4 +1,5 @@
-﻿using NeuralNetGenericOptimizationApp.Scripts.Utils;
+﻿using NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm;
+using NeuralNetGenericOptimizationApp.Scripts.Utils;
 using RDotNet;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
 {
     public class RManager
     {
-        public static string rFilePath = @"C:/Users/Saper/Documents/NeuralNetGenericOptimization/NeuralNetGenericOptimizationApp/nnt.R";
-
+     //   public static string rFilePath = @"C:/Users/Saper/Documents/NeuralNetGenericOptimization/NeuralNetGenericOptimizationApp/nnt.R";
         public static string DatasetPath;
 
         public static int ColumnNumber;
@@ -19,7 +19,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
         public static RManager rManager = new RManager();
 
         private REngine _engine = null;
-        private Dictionary<float[], double[]> _countingHistory = new Dictionary<float[], double[]>();
+        private Dictionary<object[], double[]> _countingHistory = new Dictionary<object[], double[]>();
 
         public RManager()
         {
@@ -27,40 +27,92 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             {
                 rManager = this;
             }
-            _engine = InitRConnection(rFilePath);
 
             return;
         }
 
-        public double[] Count()
+        public bool InitRConnection(string rPath)
         {
-            if(DatasetPath.Contains('\\'))
+            bool testFunctionCalledProperly = false;
+            try
             {
-                DatasetPath = Common.ConvertPathToR(DatasetPath);
-            }
-            string functionCallString = GenerateFunctionCall();
-            double[] result = _engine.Evaluate(GenerateFunctionCall()).AsNumeric().ToArray();
+                REngine.SetEnvironmentVariables();
+                REngine engine = REngine.GetInstance();
+                engine.Evaluate("source('" + rPath + "')");
+                if(engine!=null)
+                {
+                    _engine = engine;
+                }
+                testFunctionCalledProperly = CallTestFunction();
 
+                return true;
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine("ERRROR " + exception.Message);
+                return false;
+            }
+        }
+
+        public double[] GetResult(Individual individual)
+        {
+            AutoFixPath();
+            object[] key = GenerateKey(
+                individual.GetChromosome(ChromosomeType.HIDDEN_LAYER_SIZE).GetGeneDecimalValue(),
+                individual.GetChromosome(ChromosomeType.MAX_ITERATIONS).GetGeneDecimalValue(),
+                individual.GetChromosome(ChromosomeType.MAX_ITERATIONS).GetGeneFlotValue());
+
+
+            if (_countingHistory.ContainsKey(key))
+            {
+                return _countingHistory[key];
+            }
+            string functionCall = GenerateFunctionCall((int)key[0], (int)key[1], GetProperFormatFloat(key[2]));
+            Console.WriteLine(functionCall);
+            double[] result = _engine.Evaluate(functionCall).AsNumeric().ToArray();
+            _countingHistory.Add(key, result);
+            
             return result;
         }
 
-
-        private REngine InitRConnection(string rPath)
+        private object[] GenerateKey(params object[] arguments)
         {
-            REngine.SetEnvironmentVariables();
-            REngine engine = REngine.GetInstance();
-            engine.Evaluate("source('" + rPath + "')");
-
-            return engine;
+            return arguments;
         }
 
-        private string GenerateFunctionCall()
+        private float GetProperFormatFloat(object floatSavedAsObject)
+        {
+            string asText = floatSavedAsObject.ToString();
+            float tmpFloat;
+            float.TryParse(asText.Replace(',', '.'), out tmpFloat);
+
+            return tmpFloat;
+        }
+
+        private bool CallTestFunction()
+        {
+            return (_engine.Evaluate("test()").AsNumeric().ToArray()[0] == 1.0);
+        }
+
+        private string GenerateFunctionCall(int size, int maxIterations, float decayValue)
         {
             string functionCallString = "classifyWithNNt(" + "'" + DatasetPath + "'" + "," 
                 + ColumnNumber.ToString() + ","
-                + "10,100,0.8)";
+                + size + ","
+                + maxIterations + ","
+                + decayValue + ")";
 
             return functionCallString;
+        }
+
+        private void AutoFixPath()
+        {
+            if (DatasetPath.Contains('\\'))
+            {
+                DatasetPath = Common.ConvertPathToR(DatasetPath);
+            }
+
+            return;
         }
     }
 }

@@ -115,7 +115,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
         /// </summary>
         private void CountAtributes()
         {
-            double[] result = RManager.rManager.Count();
+            double[] result = RManager.rManager.GetResult(this);
             _fitness = (float)result[0];
             _time = (float)result[1];
 
