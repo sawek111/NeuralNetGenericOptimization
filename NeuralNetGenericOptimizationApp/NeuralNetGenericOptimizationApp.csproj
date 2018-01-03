@@ -70,6 +70,7 @@
     <Compile Include="Scripts\CountingWindow.xaml.cs">
       <DependentUpon>CountingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scripts\ExcelManager.cs" />
     <Compile Include="Scripts\RManager.cs" />
     <Compile Include="Scripts\Settings.cs" />
     <Compile Include="Scripts\Units\Chromosome.cs" />
