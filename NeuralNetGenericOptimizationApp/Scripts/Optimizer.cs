@@ -37,6 +37,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
 
         private void RandomSearch(int time)
         {
+            RManager.rManager.ClearHistory();
             RandomSearchAlghorithm randomSearchAlghorithm = new RandomSearchAlghorithm();
             Individual best  = randomSearchAlghorithm.Evaluate(time);
             _excelManager.WriteRow("RandomSearch", best.GetFitness().ToString(), time.ToString());
