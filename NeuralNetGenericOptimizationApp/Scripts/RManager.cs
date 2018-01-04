@@ -31,6 +31,12 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             return;
         }
 
+        public void ClearHistory()
+        {
+            _countingHistory.Clear();
+            return;
+        }
+
         public bool InitRConnection(string rPath)
         {
             bool testFunctionCalledProperly = false;
