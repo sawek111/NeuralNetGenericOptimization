@@ -7,11 +7,15 @@
         mc:Ignorable="d"
         Title="CountingWindow" Height="350" Width="525">
     <Grid>
-        <Button Content="Memetic" Margin="75,273,0,0" VerticalAlignment="Top" Width="75" Click="DoMemetic"/>
-        <Button Content="Random" HorizontalAlignment="Left" Margin="28.054,273,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.373,0.698" Click="DoRandom" Grid.Column="1"/>
         <TextBox x:Name="DatasetText" HorizontalAlignment="Left" Height="23" Margin="30,20,0,0" TextWrapping="Wrap" Text="Dataset" VerticalAlignment="Top" Width="443" Grid.ColumnSpan="2"/>
         <Button Content="Load data" HorizontalAlignment="Left" Margin="54,43,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.267,0.115" Click="ChooseDatasetFile"/>
         <TextBox x:Name="ColumnNumber" HorizontalAlignment="Left" Height="23" Margin="154,43,0,0" TextWrapping="Wrap" Text="ColumnNumber" VerticalAlignment="Top" Width="120" TextChanged="ChooseColumnNumber_TextChanged" Grid.ColumnSpan="2"/>
-        <Button Content="Count&#xD;&#xA;" HorizontalAlignment="Left" Margin="389,269,0,0" VerticalAlignment="Top" Click="DoMemetic" Width="84" Height="23"/>
+        <Button Content="Count&#xD;&#xA;" HorizontalAlignment="Left" Margin="389,269,0,0" VerticalAlignment="Top" Click="Count" Width="84" Height="23"/>
+        <Button Content="Choose destination" HorizontalAlignment="Left" Margin="179,112,0,0" VerticalAlignment="Top" Width="120" Height="32" Click="ChooseDestinationFile"/>
+        <TextBox x:Name="DestinationTextBox" HorizontalAlignment="Left" Height="23" Margin="54,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="GenerationsTB" HorizontalAlignment="Left" Height="38" Margin="28,209,0,0" TextWrapping="Wrap" Text="Generations[int]" VerticalAlignment="Top" Width="101" RenderTransformOrigin="-0.4,0.668" TextChanged="GenerationsTB_TextChanged"/>
+        <TextBox x:Name="GenerationSizeTB" HorizontalAlignment="Left" Margin="134,209,0,73.8" TextWrapping="Wrap" Text="GenerationSize[int]" Width="100" TextChanged="GenerationSizeTB_TextChanged"/>
+        <TextBox x:Name="NeighborsTB" HorizontalAlignment="Left" Height="38" Margin="239,209,0,0" TextWrapping="Wrap" Text="Neighbors[int]" VerticalAlignment="Top" Width="112" TextChanged="NeighborsTB_TextChanged"/>
+        <TextBox x:Name="MutationRateTB" HorizontalAlignment="Left" Height="38" Margin="356,209,0,0" TextWrapping="Wrap" Text="MutationRate[float]" VerticalAlignment="Top" Width="152" TextChanged="MutationRateTB_TextChanged"/>
     </Grid>
 </Window>

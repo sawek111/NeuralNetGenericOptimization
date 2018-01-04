@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NeuralNetGenericOptimizationApp.Scripts.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,15 +21,20 @@ namespace NeuralNetGenericOptimizationApp.Scripts
     /// </summary>
     public partial class CountingWindow : Window
     {
-        public const int GENERATIONS = 5;
-        public const int GENERATION_SIZE = 5;
-        public const int NEIGHBORHOOD_SIZE = 5;
 
         private Optimizer _optimizer = null;
 
         private bool _dataChosen = false;
         private bool _isCalculating = false;
+
         private string _datasetPath;
+
+        private int[] _generationsArray = null;
+        private int[] _generationSizeArray = null;
+        private int[] _neighborsArray = null;
+        private double[] _mutatationRateArray = null;
+
+        private string _destinationFilePath;
 
         private bool _classColumnNumberFilled = false;
 
@@ -40,26 +46,50 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             return;
         }
 
-        private void DoMemetic(object sender, RoutedEventArgs e)
+        private void Count(object sender, RoutedEventArgs e)
         {
             if (IsReady())
             {
                 _isCalculating = true;
-                _optimizer.MemeticSearch(GENERATIONS, GENERATION_SIZE, NEIGHBORHOOD_SIZE);
+                string savingPath = (_destinationFilePath == null) ? Directory.GetCurrentDirectory() + "/results.xlsx" : _destinationFilePath;
+                _optimizer.SetSavePath(savingPath);
+                _optimizer.Calculate(_generationsArray, _generationSizeArray, _neighborsArray, _mutatationRateArray);
                 _isCalculating = false;
             }
 
             return;
         }
 
-        private void DoRandom(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Choose excel file to save into results
+        /// </summary>
+        private void ChooseDestinationFile(object sender, RoutedEventArgs e)
         {
-            if (IsReady())
+            // Create OpenFileDialog 
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            // Set filter for file extension and default file extension 
+            dlg.DefaultExt = ".xlsx";
+            // Display OpenFileDialog by calling ShowDialog method 
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Get the selected file name and display in a TextBox 
+            if (result == true)
             {
-                _isCalculating = true;
-                _optimizer.RandomSearch();
-                _isCalculating = false;
+                // Open document 
+                string filename = dlg.FileName;
+                FileInfo fileInfo = new FileInfo(filename);
+                if (fileInfo.Extension == ".xlsx")
+                {
+                    _destinationFilePath = filename;
+                    DestinationTextBox.Text = filename;
+                    DestinationTextBox.Background = Brushes.Green;
+                    return;
+                }
             }
+            DestinationTextBox.Background = Brushes.Red;
+            _dataChosen = false;
+
+            return;
         }
 
         private void ChooseDatasetFile(object sender, RoutedEventArgs e)
@@ -70,7 +100,6 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             dlg.DefaultExt = ".csv";
             // Display OpenFileDialog by calling ShowDialog method 
             Nullable<bool> result = dlg.ShowDialog();
-
 
             // Get the selected file name and display in a TextBox 
             if (result == true)
@@ -116,12 +145,56 @@ namespace NeuralNetGenericOptimizationApp.Scripts
 
         private bool IsReady()
         {
-            return _dataChosen && _classColumnNumberFilled && !_isCalculating;
+            return _dataChosen && _classColumnNumberFilled && !_isCalculating && AreParametersSet();
         }
 
         private void GenerateOptimizator()
         {
             _optimizer = new Optimizer();
+            return;
+        }
+
+        private bool AreParametersSet()
+        {
+            return _generationsArray != null && _generationSizeArray != null && _neighborsArray != null && _mutatationRateArray != null;
+        }
+
+        private void GenerationsTB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterArray<int>(ref _generationsArray, GenerationsTB);
+            return;
+        }
+
+        private void GenerationSizeTB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterArray<int>(ref _generationSizeArray, GenerationSizeTB);
+            return;
+        }
+
+        private void NeighborsTB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterArray<int>(ref _neighborsArray, NeighborsTB);
+            return;
+        }
+
+        private void MutationRateTB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterArray<double>(ref _mutatationRateArray, MutationRateTB);
+        }
+
+        private void UpdateParameterArray<T>(ref T[] parameterArray, TextBox textBoxToRead)
+        {
+            T[] values = Common.LoadValuesArrayFromTextbox<T>(textBoxToRead);
+            
+            if (values.Length > 0)
+            {
+                textBoxToRead.Background = Brushes.Green;
+                parameterArray = values;
+                return;
+            }
+            textBoxToRead.Background = Brushes.Red;
+            parameterArray = null;
+
             return;
         }
     }
