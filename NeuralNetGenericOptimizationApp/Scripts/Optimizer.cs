@@ -12,37 +12,52 @@ namespace NeuralNetGenericOptimizationApp.Scripts
 {
     public class Optimizer
     {
+        private ExcelManager _excelManager;
+        private string _pathToSave;
 
-        public void Calculate()
+        private int _memeticWorstTime = 0;
+
+        public void Calculate(int[] generationsArray, int[] generationSizeArray, int[] neighbourhoodSizeArray, double[] mutationRateArray)
         {
+            _excelManager = new ExcelManager(_pathToSave);
+            _memeticWorstTime = 0;
 
-        }
-
-
-        public void RandomSearch()
-        {
-            RandomSearchAlghorithm randomSearchAlghorithm = new RandomSearchAlghorithm(4);
-            Individual best  = randomSearchAlghorithm.Evaluate();
+            MemeticSearch(generationsArray, generationSizeArray, neighbourhoodSizeArray, mutationRateArray);
+            RandomSearch(_memeticWorstTime);
 
             return;
         }
 
-        public float MemeticSearch(int[] generationsArray, int[] generationSizeArray, int[] neighbourhoodSizeArray, float[] mutationRateArray)
+
+        public void SetSavePath(string path)
         {
-            float time = 0.0f;
+            _pathToSave = path;
+            return;
+        }
+
+        private void RandomSearch(int time)
+        {
+            RandomSearchAlghorithm randomSearchAlghorithm = new RandomSearchAlghorithm();
+            Individual best  = randomSearchAlghorithm.Evaluate(time);
+            _excelManager.WriteRow("RandomSearch", best.GetFitness().ToString(), time.ToString());
+            
+            return;
+        }
+
+        private void MemeticSearch(int[] generationsArray, int[] generationSizeArray, int[] neighbourhoodSizeArray, double[] mutationRateArray)
+        {
             for(int crossing = 0; crossing < Enum.GetNames(typeof(CrossingType)).Length; crossing++)
             {
                 for(int selection = 0; selection < Enum.GetNames(typeof(SelectionType)).Length; selection++)
                 {
-                    
-                    CalculateMemeticSearchForAllParameters((SelectionType)selection,(CrossingType)crossing, generationsArray, generationSizeArray, mutationRateArray, neighbourhoodSizeArray);
+                   CalculateMemeticSearchForAllParameters((SelectionType)selection,(CrossingType)crossing, generationsArray, generationSizeArray, mutationRateArray, neighbourhoodSizeArray);
                 }
             }
 
-            return time;
+            return;
         }
 
-        private void CalculateMemeticSearchForAllParameters(SelectionType selection, CrossingType crossing, int[] GenerationsArray, int[] GenerationSizeArray, float[] mutationRateArray, int[] neighbourhoodSizeArray)
+        private void CalculateMemeticSearchForAllParameters(SelectionType selection, CrossingType crossing, int[] GenerationsArray, int[] GenerationSizeArray, double[] mutationRateArray, int[] neighbourhoodSizeArray)
         {
             for(int generations = 0; generations < GenerationsArray.Length; generations++)
             {
@@ -52,25 +67,29 @@ namespace NeuralNetGenericOptimizationApp.Scripts
                     {
                         for(int neighbourhoodSize = 0; neighbourhoodSize < neighbourhoodSizeArray.Length; neighbourhoodSize++)
                         {
-                            CalculateMemetic(selection, crossing, generations, generationSize, mutationRate, neighbourhoodSize, true);
+                            CalculateMemetic(selection, crossing, GenerationsArray[generations], GenerationSizeArray[generationSize], (float)mutationRateArray[mutationRate], neighbourhoodSizeArray[neighbourhoodSize], true);
                             CalculateMemetic(selection, crossing, generations, generationSize, mutationRate, neighbourhoodSize, false);
-                            //TODO SAVE TO file 
                         }
                     }
                 }
             }
+
+            return;
         }
 
-        private float CalculateMemetic(SelectionType selection, CrossingType crossing, int generations, int generationSize , float mutationRate, int neighbourhoodSize, bool elitism )
+        /// <summary>
+        /// Calculates memetic, save to excel and updates _memeticWorstTime
+        /// </summary>
+        private void CalculateMemetic(SelectionType selection, CrossingType crossing, int generations, int generationSize , float mutationRate, int neighbourhoodSize, bool elitism )
         {
-
+            RManager.rManager.ClearHistory();
             GeneticAlgorithm genetic = new GeneticAlgorithm();
             LocalSearchAlghorithm localSearch = new LocalSearchAlghorithm();
+            DateTime startTime = DateTime.Now;
 
             Population population = new Population(generationSize);
             Individual best = new Individual();
             int generationNr = 0;
-
             while (generationNr < generations)
             {
                 generationNr++;
@@ -80,10 +99,12 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             }
             best = Individual.GetBetterIndividual(population.GetMostAccurant(1)[0], best);
 
-            return best.GetFitness();
+            int elitismInteger = (elitism) ? 1 : 0;
+            int seconds = (startTime - DateTime.Now).Seconds;
+            _memeticWorstTime = (seconds > _memeticWorstTime) ? seconds : _memeticWorstTime;
+            _excelManager.WriteRow(selection.ToString(), crossing.ToString(), generations.ToString(), generationSize.ToString(), mutationRate.ToString(), neighbourhoodSize.ToString(), elitismInteger.ToString(), best.GetFitness().ToString(), seconds.ToString());
+
+            return;
         }
-
-        // private void 
-
     }
 }
