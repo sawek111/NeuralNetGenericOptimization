@@ -34,14 +34,22 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Utils
         /// <returns>Array with readed values </returns>
         public static T[] LoadValuesArrayFromTextbox<T>(TextBox textbox)
         {
-            string[] words = textbox.Text.Split(',');
+            string[] words = textbox.Text.Split(';');
             List<T> wordsList = new List<T>();
 
             for (int i = 0; i < words.Length; i++)
             {
-                if (words[i] is T)
+                try
                 {
-                    wordsList.Add((T)Convert.ChangeType(words[i], typeof(T)));
+                    T value = (T)Convert.ChangeType(words[i], typeof(T));
+                    if (value != null)
+                    {
+                        wordsList.Add(value);
+                    }
+                }
+                catch(Exception e)
+                {
+                    continue;
                 }
             }
 
