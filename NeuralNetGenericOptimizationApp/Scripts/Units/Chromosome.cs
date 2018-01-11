@@ -49,7 +49,10 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Units
         {
             string valueString = string.Join("", _genes);
             int value = Convert.ToInt32(valueString, 2);
-            Console.WriteLine(_genes + " value: " + value);
+            if(value == 0)
+            {
+                return 1;
+            }
 
             return value;
         }
