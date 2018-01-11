@@ -63,13 +63,26 @@ namespace NeuralNetGenericOptimizationApp.Scripts.GeneticAlghoritm
         public Individual[] GetMostAccurant(int count)
         {
             Individual[] best = new Individual[count];
+            int saved = 0;
             if(!_sorted)
             {
                 SortWithAccuracy();
             }
-            for(int i = 0; i < best.Length; i++)
+            try
             {
-                best[i] = _population[i];
+                for (int i = 0; i < best.Length; i++)
+                {
+                    saved++;
+                    best[i] = _population[i];
+                }
+            }
+            catch(Exception e)
+            {
+                for (int i = saved; i < best.Length; i++ )
+                {
+                    best[i] = new Individual();
+                }
+                return best;
             }
 
             return best;
