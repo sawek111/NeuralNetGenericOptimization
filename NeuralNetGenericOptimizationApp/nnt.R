@@ -1,3 +1,6 @@
+VALIDATIONS = 3
+
+
 pkgTest <- function(x)
 {
   if (!require(x,character.only = TRUE))
@@ -76,7 +79,7 @@ classifyWithNNt <- function(pathToDirectory, classColumnNumber, hiddenNeuronsVal
   
   someData <- read.csv2(pathToDirectory)
   
-  k = 10
+  k = VALIDATIONS
   
   accuracyNntFilter<- vector('numeric')
   accuracyNnt <- vector('numeric')
