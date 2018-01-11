@@ -56,11 +56,18 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Utils
             return wordsList.ToArray();
         }
 
-        public IEnumerable<int> Split(Int32 val, int parts, int minimumValue = 5)
+        public IEnumerable<int> Split(Int32 val, int parts, int minimumValue = 2)
         {
             int left = val;
             for (int i = 0; i < parts - 1; i++)
             {
+                if(minimumValue >= (left/parts))
+                {
+                    var extraCurr = ((left - 1) > 0) ? 1 : 0;
+                    yield return extraCurr;
+                    left -= extraCurr;
+                    continue;
+                }
                 var curr = _rand.Next(minimumValue, left / parts);
                 yield return curr;
                 left -= curr;
