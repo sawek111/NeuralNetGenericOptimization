@@ -21,7 +21,6 @@ namespace NeuralNetGenericOptimizationApp.Scripts
         {
             _excelManager = new ExcelManager(_pathToSave);
             _memeticWorstTime = 0;
-
             MemeticSearch(generationsArray, generationSizeArray, neighbourhoodSizeArray, mutationRateArray);
             RandomSearch(_memeticWorstTime);
 
@@ -88,7 +87,6 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             GeneticAlgorithm genetic = new GeneticAlgorithm();
             LocalSearchAlghorithm localSearch = new LocalSearchAlghorithm();
             DateTime startTime = DateTime.Now;
-
             Population population = new Population(generationSize);
             Individual best = new Individual();
             int generationNr = 0;
@@ -100,11 +98,13 @@ namespace NeuralNetGenericOptimizationApp.Scripts
                 best = Individual.GetBetterIndividual(localBest, best);
             }
             best = Individual.GetBetterIndividual(population.GetMostAccurant(1)[0], best);
-
-            int elitismInteger = (elitism) ? 1 : 0;
+            string netParameters = "Decay:" + best.GetChromosome(ChromosomeType.DECAY).GetGeneFlotValue().ToString()
+                + " Size:" + best.GetChromosome(ChromosomeType.HIDDEN_LAYER_SIZE).GetGeneDecimalValue().ToString()
+                + " MaxIterations" + best.GetChromosome(ChromosomeType.MAX_ITERATIONS).GetGeneDecimalValue().ToString();
+                
             int seconds = (startTime - DateTime.Now).Seconds;
             _memeticWorstTime = (seconds > _memeticWorstTime) ? seconds : _memeticWorstTime;
-            _excelManager.WriteRow(selection.ToString(), crossing.ToString(), generations.ToString(), generationSize.ToString(), mutationRate.ToString(), neighbourhoodSize.ToString(), elitismInteger.ToString(), best.GetFitness().ToString(), seconds.ToString());
+            _excelManager.WriteRow(selection.ToString(), crossing.ToString(), generations.ToString(), generationSize.ToString(), mutationRate.ToString(), neighbourhoodSize.ToString(), elitism.ToString() , best.GetFitness().ToString(), seconds.ToString(), netParameters);
 
             return;
         }
