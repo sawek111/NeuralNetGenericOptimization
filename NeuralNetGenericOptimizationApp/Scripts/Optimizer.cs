@@ -68,8 +68,9 @@ namespace NeuralNetGenericOptimizationApp.Scripts
                     {
                         for(int neighbourhoodSize = 0; neighbourhoodSize < neighbourhoodSizeArray.Length; neighbourhoodSize++)
                         {
+                            Console.WriteLine(selection.ToString() + "  " + crossing.ToString());
                             CalculateMemetic(selection, crossing, GenerationsArray[generations], GenerationSizeArray[generationSize], (float)mutationRateArray[mutationRate], neighbourhoodSizeArray[neighbourhoodSize], true);
-                            CalculateMemetic(selection, crossing, generations, generationSize, mutationRate, neighbourhoodSize, false);
+                            CalculateMemetic(selection, crossing, GenerationsArray[generations], GenerationSizeArray[generationSize], (float)mutationRateArray[mutationRate], neighbourhoodSizeArray[neighbourhoodSize], false);
                         }
                     }
                 }
