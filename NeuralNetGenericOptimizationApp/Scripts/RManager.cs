@@ -74,7 +74,6 @@ namespace NeuralNetGenericOptimizationApp.Scripts
                 return _countingHistory[key];
             }
             string functionCall = GenerateFunctionCall((int)key[0], (int)key[1], GetProperFormatFloat(key[2]));
-            Console.WriteLine(functionCall);
             double[] result = _engine.Evaluate(functionCall).AsNumeric().ToArray();
             _countingHistory.Add(key, result);
             

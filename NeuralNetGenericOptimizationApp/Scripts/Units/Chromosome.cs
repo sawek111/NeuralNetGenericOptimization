@@ -63,7 +63,6 @@ namespace NeuralNetGenericOptimizationApp.Scripts.Units
             string valueString = string.Join("", _genes);
             int value = Convert.ToInt32(valueString, 2);
             float dividedValue = (float)value / (float)Math.Pow(2, _genes.Length);
-            Console.WriteLine(_genes + " value: " + value);
 
             return dividedValue;
         }

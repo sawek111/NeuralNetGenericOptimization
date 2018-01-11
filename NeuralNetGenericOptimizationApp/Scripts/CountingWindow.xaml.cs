@@ -107,7 +107,6 @@ namespace NeuralNetGenericOptimizationApp.Scripts
                 // Open document 
                 string filename = dlg.FileName;
                 FileInfo fileInfo = new FileInfo(filename);
-                Console.WriteLine(fileInfo.Extension);
                 if (fileInfo.Extension == ".csv")
                 {
                     _datasetPath = filename;

@@ -16,7 +16,7 @@ createProgressBar <- function(iterationNumber)
 
 countAccuraciesNnt <- function(class, trainingset, testset, hiddenNeuronsValue, iterationValue, decayValue)
 {
-  neuralNetwork <- nnet(class, data = trainingset, size = hiddenNeuronsValue, maxit = iterationValue, decay = decayValue, MaxNWts = 1000000)
+  neuralNetwork <- nnet(class, data = trainingset, size = hiddenNeuronsValue, maxit = iterationValue, decay = decayValue, trace = FALSE, MaxNWts = 1000000)
   pred.neuralNetwork <- predict(neuralNetwork,testset,type = "class")
   fold_accuracy <- mean(pred.neuralNetwork == testset$Class)
   return(fold_accuracy)

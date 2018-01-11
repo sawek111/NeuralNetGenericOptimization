@@ -37,7 +37,6 @@ namespace NeuralNetGenericOptimizationApp
                 // Open document 
                 string fileName = dlg.FileName;
                 FileInfo fileInfo = new FileInfo(fileName);
-                Console.WriteLine(fileInfo.Extension);
                 if (fileInfo.Extension == ".R")
                 {
                     string path = Common.ConvertPathToR(fileName);
