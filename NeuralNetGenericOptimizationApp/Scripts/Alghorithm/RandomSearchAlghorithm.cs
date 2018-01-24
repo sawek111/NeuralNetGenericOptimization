@@ -67,7 +67,7 @@ namespace NeuralNetGenericOptimizationApp
             return best;
         }
 
-        public Individual Evaluate(int seconds)
+        public Individual Evaluate(double seconds)
         {
             if (!_timeDependent)
             {
@@ -77,7 +77,7 @@ namespace NeuralNetGenericOptimizationApp
             Individual best = new Individual();
             DateTime startCount = DateTime.Now;
 
-           while((DateTime.Now - startCount).Seconds < seconds)
+           while((DateTime.Now - startCount).TotalSeconds < seconds)
             {
                 Individual newIndividual = new Individual();
                 best = Individual.GetBetterIndividual(best, newIndividual);

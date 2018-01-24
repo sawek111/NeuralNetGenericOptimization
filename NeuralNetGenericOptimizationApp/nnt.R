@@ -1,4 +1,4 @@
-VALIDATIONS = 3
+VALIDATIONS = 1
 
 
 pkgTest <- function(x)

@@ -12,21 +12,42 @@ namespace NeuralNetGenericOptimizationApp.Scripts
 {
     public class Optimizer
     {
+        private readonly static int[] basicGenerations = new int[] { 30 };
+        private static int[] basicGenerationSize = new int[] { 20 };
+        private static double[] basicMutationRate = new double[] { 0.01 };
+        private static int[] basicNeighbours = new int[] { 3 };
+
         private ExcelManager _excelManager;
         private string _pathToSave;
 
-        private int _memeticWorstTime = 0;
+        private double _memeticWorstTime = 0;
 
         public void Calculate(int[] generationsArray, int[] generationSizeArray, int[] neighbourhoodSizeArray, double[] mutationRateArray)
         {
             _excelManager = new ExcelManager(_pathToSave);
             _memeticWorstTime = 0;
-            MemeticSearch(generationsArray, generationSizeArray, neighbourhoodSizeArray, mutationRateArray);
-            RandomSearch(_memeticWorstTime);
+
+            CalculateForChosenParameter<int>(generationsArray, generationsArray, basicGenerationSize, basicNeighbours, basicMutationRate);
+
+            CalculateForChosenParameter<int>(generationsArray, generationsArray, basicGenerationSize, basicNeighbours, basicMutationRate);
+            CalculateForChosenParameter<int>(generationSizeArray, basicGenerations, generationSizeArray, basicNeighbours, basicMutationRate);
+            CalculateForChosenParameter<int>(neighbourhoodSizeArray, basicGenerations, basicGenerationSize, neighbourhoodSizeArray, basicMutationRate);
+            CalculateForChosenParameter<double>(mutationRateArray, basicGenerations, basicGenerationSize, basicNeighbours, mutationRateArray);
 
             return;
         }
 
+        private void CalculateForChosenParameter<T>(T[] mainArray, int[] generationsArray, int[] generationSizeArray, int[] neighbourhoodSizeArray, double[] mutationRateArray)
+        {
+            for (int i = 0; i < mainArray.Length; i++)
+            {
+                _memeticWorstTime = 0;
+                MemeticSearch(generationsArray, generationSizeArray, neighbourhoodSizeArray, mutationRateArray);
+                RandomSearch(_memeticWorstTime);
+            }
+
+            return;
+        }
 
         public void SetSavePath(string path)
         {
@@ -34,7 +55,7 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             return;
         }
 
-        private void RandomSearch(int time)
+        private void RandomSearch(double time)
         {
             RManager.rManager.ClearHistory();
             RandomSearchAlghorithm randomSearchAlghorithm = new RandomSearchAlghorithm();
@@ -102,9 +123,9 @@ namespace NeuralNetGenericOptimizationApp.Scripts
                 + " Size:" + best.GetChromosome(ChromosomeType.HIDDEN_LAYER_SIZE).GetGeneDecimalValue().ToString()
                 + " MaxIterations" + best.GetChromosome(ChromosomeType.MAX_ITERATIONS).GetGeneDecimalValue().ToString();
                 
-            int seconds = (startTime - DateTime.Now).Seconds;
+            double seconds = (DateTime.Now - startTime).TotalSeconds;
             _memeticWorstTime = (seconds > _memeticWorstTime) ? seconds : _memeticWorstTime;
-            _excelManager.WriteRow(selection.ToString(), crossing.ToString(), generations.ToString(), generationSize.ToString(), mutationRate.ToString(), neighbourhoodSize.ToString(), elitism.ToString() , best.GetFitness().ToString(), seconds.ToString(), netParameters);
+            _excelManager.WriteRow(selection.ToString(), crossing.ToString(), generations.ToString(), generationSize.ToString(), mutationRate.ToString(), neighbourhoodSize.ToString(), elitism.ToString() , best.GetFitness().ToString(), ((int)seconds).ToString(), netParameters);
 
             return;
         }

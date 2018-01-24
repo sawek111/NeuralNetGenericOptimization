@@ -51,10 +51,20 @@ namespace NeuralNetGenericOptimizationApp.Scripts
             if (IsReady())
             {
                 _isCalculating = true;
-                string savingPath = (_destinationFilePath == null) ? Directory.GetCurrentDirectory() + "/results.xlsx" : _destinationFilePath;
-                _optimizer.SetSavePath(savingPath);
-                _optimizer.Calculate(_generationsArray, _generationSizeArray, _neighborsArray, _mutatationRateArray);
+                Calculate(5);
                 _isCalculating = false;
+            }
+
+            return;
+        }
+
+        private void Calculate(int count)
+        {
+            string savingPath = (_destinationFilePath == null) ? Directory.GetCurrentDirectory() + "/results.xlsx" : _destinationFilePath;
+            _optimizer.SetSavePath(savingPath);
+            for (int i = 0; i < count; i++)
+            {
+                _optimizer.Calculate(_generationsArray, _generationSizeArray, _neighborsArray, _mutatationRateArray);
             }
 
             return;
